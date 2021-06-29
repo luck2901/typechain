@@ -1,9 +1,21 @@
+import { timeStamp } from "console";
+import * as CryptoJS from "crypto-js";
+
 class Block {
     public index: number;
     public hash: string;
     public previousHash: string;
     public data: string;
     public timestamp: number;
+
+    static calculateBlockHash = (
+        index: number,
+        previousHash: string,
+        timestamp: number,
+        data: string
+    ): string => CryptoJS.SHA256(index + previousHash + timeStamp + data).toString();
+    //static 함수임으로 전역함수.
+
     constructor(index: number,
         previousHash: string,
         hash: string,
@@ -20,8 +32,12 @@ class Block {
 
 const genesisBlock: Block = new Block(0, "202020202020200", "", "Hello", 123456);
 
-let blockchain: [Block] = [genesisBlock];
+let blockchain: Block[] = [genesisBlock];
 
-console.log(blockchain);
+const getBlockchain = (): Block[] => blockchain;
+
+const getLatestBlock = (): Block => blockchain[blockchain.length - 1];
+
+const getNewTimeStamp = (): number => Math.round(new Date().getTime() / 1000);
 
 export { }; 
